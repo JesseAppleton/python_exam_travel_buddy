@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    
+    <title>Travel Dashboard</title>
+</head>
+<body>
+    <div class="container">
+        <nav class="navbar navbar-expand-sm bg-dark navbar-dark">
+        <ul class="navbar-nav col-11">
+            <li class="nav-item active">
+                <a class="nav-link" href="/travels">Dashboard</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/travel/new">New Destination</a>
+            </li>
+        </ul>
+        <ul class="navbar-nav col-1" style="float:right;">
+            <li class="nav-item">  
+                <a class="nav-link" href="/logout">Logout</a>
+            </li>
+        </ul>
+        </nav>
+        <div class="jumbotron">
+            <h1>Hello, {{ user.name }} <em>({{ user.username }})</em>!</h1>
+        </div>
+        <h2>Your Trip Schedules</h2>
+        <table class='table table-striped'>
+            <tr>
+                <th style="width:20%;">Destination</th>
+                <th style="width:20%;">Travel Start Date</th>
+                <th style="width:20%;">Travel End Date</th>
+                <th style="width:20%;">Plan</th>
+                <th style="width:20%;">Actions</th>
+
+            </tr>
+            {% for travel in joined %}
+            <tr>
+                <td><a href="/travel/{{travel.id}}">{{ travel.place }}</a></td>
+                <td>{{ travel.startdate }}</td>
+                <td>{{ travel.enddate }}</td>
+                <td>{{ travel.plan }}</td>
+                <td>
+                    {% if travel.poster.id == request.session.uid %}
+                        <a href="/travel/{{travel.id}}/delete">Delete</a>
+                    {% else %}
+                        <a href="/travel/{{travel.id}}/unjoin">Unjoin</a>
+                    {% endif %}
+                    
+                </td>
+            </tr>
+            {% endfor %}
+            
+        </table>
+        <h2>Other Users Travel Plans</h2>
+        <table class='table table-striped'>
+            <tr>
+                <th style="width:20%;">Poster</th>
+                <th style="width:20%;">Destination</th>
+                <th style="width:20%;">Travel Start Date</th>
+                <th style="width:20%;">Travel End Date</th>
+                <th style="width:20%;">Do you want to join?</th>
+            </tr>
+            {% for travel in others %}
+            <tr>
+                <td>{{ travel.poster.name }}</td>
+                <td><a href="/travel/{{travel.id}}">{{ travel.place }}</a></td>
+                <td>{{ travel.startdate }}</td>
+                <td>{{ travel.enddate }}</td>
+                <td>
+                    <a href="/travel/{{travel.id}}/join">Join</a>
+                </td>
+            </tr>
+            {% endfor %}
+            
+        </table>
+    </div>
+</body>
+</html>
